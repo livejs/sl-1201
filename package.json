@@ -1,0 +1,38 @@
+{
+  "name": "baseline418",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server -o -c-1"
+  },
+  "standard": {
+    "globals": [
+      "OscillatorNode",
+      "GainNode",
+      "BiquadFilterNode",
+      "AudioContext",
+      "AudioBufferSourceNode",
+      "ConstantSourceNode",
+      "WaveShaperNode",
+      "AudioWorkletNode",
+      "AudioWorkletProcessor",
+      "DynamicsCompressorNode"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/livejs/DOMinator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/livejs/DOMinator/issues"
+  },
+  "homepage": "https://github.com/livejs/DOMinator#readme",
+  "devDependencies": {
+    "http-server": "^0.11.1",
+    "standard": "^12.0.1"
+  }
+}
