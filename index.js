@@ -1,4 +1,5 @@
 import Synth from './modules/synth.js'
+import PolySynth from './modules/poly.js'
 import MixerChannel from './modules/mixer-channel.js'
 import MidiRouter from './modules/midi-router.js'
 import SampleLoader from './modules/sample-loader.js'
@@ -87,7 +88,7 @@ function init () {
   drums.config(63, { chokeGroup: 'h', volume: 0.5 })
 
   const bass = new Synth()
-  const lead = new Synth()
+  const lead = new PolySynth()
   const slicer = new Slicer({
     ticks: 42 * BEAT_TICKS * 4,
     sliceCount: 42 * 4,

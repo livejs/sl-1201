@@ -53,7 +53,7 @@ export default class Synth {
     this.detuneValue = new ConstantSourceNode(this.context)
     this.filterEnvelopeAmount = new GainNode(this.context, { gain: 0.5 })
     this.vibratoAmount = new GainNode(this.context, { gain: vibrato })
-    this.filterValue = new ConstantSourceNode(this.context, { offset: 0.01 })
+    this.filterValue = new ConstantSourceNode(this.context, { offset: 0.8 })
     this.filterShaper = new WaveShaperNode(this.context, { curve: expCurve })
     this.filterOffset = new ConstantSourceNode(this.context, { offset: 20 })
     // filter modulation connections
