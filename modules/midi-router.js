@@ -47,18 +47,22 @@ export default class MidiRouter {
     const data = event.data
     if (this.useClock && data.length === 1) {
       if (data[0] === 0xF8) {
-        this.channelHandlers.forEach((handler) => {
-          if (handler && typeof handler.clock === 'function') {
-            handler.clock(event.timeStamp)
-          }
+        this.channelHandlers.forEach((handlers) => {
+          handlers.forEach((handler) => {
+            if (handler && typeof handler.clock === 'function') {
+              handler.clock(event.timeStamp)
+            }            
+          })
         })
       }
       if (data[0] === 0xFC) {
         console.log('stop')
-        this.channelHandlers.forEach((handler) => {
-          if (handler && typeof handler.stop === 'function') {
-            handler.stop()
-          }
+        this.channelHandlers.forEach((handlers) => {
+          handlers.forEach((handler) => {
+            if (handler && typeof handler.stop === 'function') {
+              handler.stop(event.timeStamp)
+            }
+          })            
         })
       }
     }
@@ -71,35 +75,46 @@ export default class MidiRouter {
         // handle noteon
         // Specific Quack Handling
         if (channel === QUACK_CHANNEL && data[1] === QUACK_NOTE) {
-          this.channelHandlers.forEach((handler) => {
-            if (handler && typeof handler.quack === 'function') {
-              handler.quack()
+          this.channelHandlers.forEach((handlers) => {
+            handlers.forEach((handler) => {
+              if (handler && typeof handler.quack === 'function') {
+                handler.quack()
+              }              
+            })
+          })
+        }
+        if (this.channelHandlers[channel] != null) {
+          this.channelHandlers[channel].forEach((handler) => {
+            if (handler && (typeof handler.noteOn === 'function')) {
+            handler.noteOn(data[1], data[2])
             }
           })
         }
-        if (this.channelHandlers[channel] != null && (typeof this.channelHandlers[channel].noteOn === 'function')) {
-          this.channelHandlers[channel].noteOn(data[1], data[2])
-        }
       }
-      if (command === 128) {
+      if (command === 128 && this.channelHandlers[channel] != null) {
         // handle noteoff
-        if (this.channelHandlers[channel] != null && typeof this.channelHandlers[channel].noteOff === 'function') {
-          this.channelHandlers[channel].noteOff(data[1], data[2])
-        }
+        this.channelHandlers[channel].forEach((handler) => {
+          if (handler && (typeof handler.noteOff === 'function')) {
+            handler.noteOff(data[1], data[2])
+          }
+        })
       }
-      if (command === 176) {
+      if (command === 176 && this.channelHandlers[channel] != null) {
         // handle CC
-        if (this.channelHandlers[channel] != null && typeof this.channelHandlers[channel].cc === 'function') {
-          this.channelHandlers[channel].cc(data[1], data[2])
-        }
+        this.channelHandlers[channel].forEach((handler) => {
+          if (handler && (typeof handler.cc === 'function')) {
+            handler.cc(data[1], data[2])
+          }
+        })
       }
-      if (command === 224) {
+      if (command === 224 && this.channelHandlers[channel] != null) {
         // handle PB
-        if (this.channelHandlers[channel] != null && typeof this.channelHandlers[channel].pb === 'function') {
-          const pbValue = ((data[2] << 7 + data[1]) - 0x2000) / 8192
-
-          this.channelHandlers[channel].pb(pbValue)
-        }
+        this.channelHandlers[channel].forEach((handler) => {
+          if (handler && (typeof handler.cc === 'function')) {
+            const pbValue = ((data[2] << 7 + data[1]) - 0x2000) / 8192
+            handler.cc(data[1], data[2])
+          }
+        })
       }
     }
   }

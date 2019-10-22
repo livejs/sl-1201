@@ -58,35 +58,32 @@ function init () {
   ]
 
   // MIDI Channels for Inst + Send from 1
-  const drums = new DrumSampler('drums.wav', 36, 63)
+  const drums = new DrumSampler('drums.wav', 36, 51)
 
   drums.config(36, { volume: 1.2 })
   drums.config(37, { volume: 0.5 })
   drums.config(39, { volume: 0.7 }) // clap
   drums.config(48, { volume: 0.7 }) // clap
 
-  drums.config(56, { volume: 0.5 })
+  // drums.config(56, { volume: 0.5 })
 
-  drums.config(57, { volume: 0.7 })
-  drums.config(58, { volume: 0.7 })
-  drums.config(59, { volume: 0.7 })
+  // drums.config(57, { volume: 0.7 })
+  // drums.config(58, { volume: 0.7 })
+  // drums.config(59, { volume: 0.7 })
   // congas
   drums.config(40, { volume: 0.5 })
   drums.config(42, { volume: 0.5 })
   drums.config(44, { volume: 0.5 })
 
   drums.config(49, { volume: 0.6 })
+  drums.config(50, { volume: 0.3 })
   drums.config(51, { volume: 0.6 })
-  drums.config(53, { volume: 0.6 })
+  // drums.config(53, { volume: 0.6 })
 
   // hats
-  drums.config(41, { chokeGroup: 'h', volume: 0.3 })
-  drums.config(43, { chokeGroup: 'h', volume: 0.3 })
-  drums.config(50, { chokeGroup: 'h', volume: 0.5 })
-  drums.config(52, { chokeGroup: 'h', volume: 0.3 })
-  drums.config(54, { chokeGroup: 'h', volume: 0.5 })
-  drums.config(63, { chokeGroup: 'h', volume: 0.5 })
-
+  drums.config(42, { chokeGroup: 'h', volume: 0.3 })
+  drums.config(46, { chokeGroup: 'h', volume: 0.3 })
+  
   const bass = new Synth()
   const lead = new PolySynth()
   const slicer = new Slicer({
@@ -153,11 +150,13 @@ function init () {
 
   // MIDI router connections
   ;[
-    drums, bass, lead, slicer, oneshots,
-    reverbFX, delayFX,
-    drumsChannel, bassChannel, leadChannel, slicerChannel, oneshotsChannel,
-    reverbChannel, delayChannel,
-    ui // to display clock info
+    [drums, drumsChannel],
+    [bass, bassChannel], 
+    [lead, leadChannel], 
+    [slicer, slicerChannel], 
+    [oneshots, oneshotsChannel],
+    [reverbFX, reverbChannel], [delayFX, delayChannel],
+    [ui] // to display clock info
   ].forEach((obj, i) => {
     midiInputs.forEach(router => {
       router.connect(i + 1, obj)

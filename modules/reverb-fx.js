@@ -159,10 +159,10 @@ export default class ReverbFX {
     return this.freeverb
   }
   cc (ctrl, value) {
-    if (ctrl === 1) {
+    if (ctrl === 16) {
       this.freeverb.roomSize = midiFloat(value)
     }
-    if (ctrl === 2) {
+    if (ctrl === 17) {
       this.freeverb.dampening = midiFloat(value) * 2000
     }
   }

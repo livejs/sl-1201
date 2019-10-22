@@ -1,5 +1,6 @@
 const FILTER_SMOOTHING = 0.05
 const AMP_SMOOTHING = 0.01
+const POLYPHONY = 12
 
 class PolyVoice {
   constructor(synth, context) {
@@ -39,15 +40,15 @@ class PolyVoice {
   }
   noteOn(note) {
 
-    console.log("NOn", note)
+    console.log("NOn", note, this.on)
     const time = this.context.currentTime
     this.on = true
     this.note = note
     this.osc.type = this.synth.oscType
-    //this.amp.gain.setTargetAtTime(0, time, 0.01)
     //this.amp.gain.linearRampToValueAtTime(1, time + this.synth.attackDuration)
     //this.amp.gain.linearRampToValueAtTime(this.synth.sustain, time + this.synth.attackDuration + this.synth.decayDuration)
     this.osc.detune.value = (note - 69) * 100                                                             
+    this.envelope.offset.setTargetAtTime(0, time, 0.01)
     this.envelope.offset.linearRampToValueAtTime(1, time + this.synth.attackDuration)
     this.envelope.offset.setTargetAtTime(Math.max(0.0001, this.synth.sustain), time + this.synth.attackDuration, this.synth.decayDuration / 8)
 
@@ -57,13 +58,12 @@ class PolyVoice {
     console.log("NOff")
     this.on = false
     //this.amp.gain.linearRampToValueAtTime(0, time + this.synth.releaseDuration)
-    this.envelope.offset.setTargetAtTime(0.0001, time, this.synth.releaseDuration / 8)
+    this.envelope.offset.setTargetAtTime(0.0000001, time, this.synth.releaseDuration / 8)
     this.note = -1
     this.offTime = this.context.currentTime + this.synth.releaseDuration
   }
 }
 
-const POLYPHONY = 6
 
 export default class PolySynth {
   constructor({oscillator = 'sawtooth'} = {}) {
@@ -113,7 +113,7 @@ export default class PolySynth {
 
   cc (control, value) {
     const time = this.context.currentTime
-    if (control === 75) { // cutoff
+    if (control === 74) { // cutoff
       this.voices.forEach((voc) => {
         voc.filterValue.offset.setTargetAtTime(exp(midiFloat(value)), time, FILTER_SMOOTHING)
       })
@@ -126,6 +126,7 @@ export default class PolySynth {
         voc.filterEnvelopeAmount.gain.setTargetAtTime(exp(midiFloat(value) * 2 - 1), time, FILTER_SMOOTHING)
       })
     } else if (control === 73) { // attack
+      console.log("ATT", exp(midiFloat(value)) * 4)
       this.attackDuration = exp(midiFloat(value)) * 4
     } else if (control === 75) { // decay
       this.decayDuration = exp(midiFloat(value)) * 4

@@ -47,13 +47,13 @@ export default class MixerChannel {
 
   cc (id, value) {
     let time = window.audioContext.currentTime
-    if (id === 1) { // VOLUME
+    if (id === 7) { // VOLUME
       this.output.gain.setTargetAtTime(cubic(midiFloat(value) * 1.5), time, GAIN_SMOOTHING)
-    } else if (id === 2) { // REVERB SEND
+    } else if (id === 91) { // REVERB SEND
       this.reverbSend.gain.setTargetAtTime(cubic(midiFloat(value)), time, GAIN_SMOOTHING)
-    } else if (id === 3) { // DELAY SEND
+    } else if (id === 92) { // DELAY SEND
       this.delaySend.gain.setTargetAtTime(cubic(midiFloat(value)), time, GAIN_SMOOTHING)
-    } else if (id === 4) { // DUAL FILTER
+    } else if (id === 93) { // DUAL FILTER
       if (value > 64) {
         this.lowPass.frequency.setTargetAtTime(20000, time, FILTER_SMOOTHING)
         this.highPass.frequency.setTargetAtTime(cubic(midiFloat(value, 64, 127)) * 20000 + 20, time, FILTER_SMOOTHING)
@@ -64,11 +64,11 @@ export default class MixerChannel {
         this.lowPass.frequency.setTargetAtTime(20000, time, 0.1)
         this.highPass.frequency.setTargetAtTime(20, time, 0.1)
       }
-    } else if (id === 5) { // BIT REDUCTION
+    } else if (id === 94) { // BIT REDUCTION
       this.bitDepth.setTargetAtTime(16 - (value / 127 * 15), time, FILTER_SMOOTHING)
-    } else if (id === 6) { // RATE REDUCTION
+    } else if (id === 95) { // RATE REDUCTION
       this.frequencyReduction.setTargetAtTime(1.0 - midiFloat(value), time, FILTER_SMOOTHING)
-    } else if (id === 7) { // DUCKING AMOUNT
+    } else if (id === 90) { // DUCKING AMOUNT
       this.duckAmount = midiFloat(value)
     }
   }

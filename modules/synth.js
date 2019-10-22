@@ -108,38 +108,38 @@ export default class Synth {
 
   cc (control, value) {
     const time = this.context.currentTime
-    if (control === 1) { // attack
+    if (control === 73) { // attack
       this.attackDuration = exp(midiFloat(value)) * 4
-    } else if (control === 2) { // decay
+    } else if (control === 75) { // decay
       this.decayDuration = exp(midiFloat(value)) * 4
-    } else if (control === 3) { // sustain
+    } else if (control === 79) { // sustain
       this.sustain = midiFloat(value)
-    } else if (control === 4) { // release
+    } else if (control === 72) { // release
       this.releaseDuration = exp(midiFloat(value)) * 4
-    } else if (control === 5) { // portamento
+    } else if (control === 84) { // portamento
       this.glideDuration = exp(midiFloat(value)) * 2
-    } else if (control === 6) { // cutoff
+    } else if (control === 74) { // cutoff
       this.filterValue.offset.setTargetAtTime(exp(midiFloat(value)), time, FILTER_SMOOTHING)
-    } else if (control === 7) { // resonance
+    } else if (control === 71) { // resonance
       this.filter.Q.setTargetAtTime(exp(midiFloat(value)) * 20, time, FILTER_SMOOTHING)
-    } else if (control === 8) { // filter envelope
+    } else if (control === 70) { // filter envelope
       this.filterEnvelopeAmount.gain.setTargetAtTime(exp(midiFloat(value) * 2 - 1), time, FILTER_SMOOTHING)
-    } else if (control === 9) { // square <-|-> saw
+    } else if (control === 80) { // square <-|-> saw
       this.squareAmp.gain.setTargetAtTime(exp(1 - midiFloat(value)), time, AMP_SMOOTHING)
       this.sawAmp.gain.setTargetAtTime(exp(midiFloat(value)), time, AMP_SMOOTHING)
-    } else if (control === 10) { // sub
+    } else if (control === 81) { // sub
       this.subAmp.gain.setTargetAtTime(exp(midiFloat(value) * 1.5), time, AMP_SMOOTHING)
-    } else if (control === 11) { // noise
+    } else if (control === 82) { // noise
       this.noiseAmp.gain.setTargetAtTime(exp(midiFloat(value)), time, AMP_SMOOTHING)
-    } else if (control === 12) { // amp envelope amount
+    } else if (control === 83) { // amp envelope amount
       // TODO
-    } else if (control === 13) { // oscillator detune
+    } else if (control === 85) { // oscillator detune
       this.detuneValue.offset.setTargetAtTime((midiFloat(value) * 2 - 1) * 1200, time, PITCH_SMOOTHING)
-    } else if (control === 14) { // vibrato
+    } else if (control === 86) { // vibrato
       this.vibratoAmount.gain.setTargetAtTime(midiFloat(value) * 200, time, PITCH_SMOOTHING)
-    } else if (control === 15) { // pitch
+    } else if (control === 87) { // pitch
 
-    } else if (control === 16) { // pitch envelope
+    } else if (control === 88) { // pitch envelope
       // TODO
     }
   }

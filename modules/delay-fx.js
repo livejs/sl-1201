@@ -61,7 +61,7 @@ export default class DelayFX {
   }
 
   cc (ccnum, value) {
-    if (ccnum === 1) { // delay time
+    if (ccnum === 16) { // delay time
       if (value > 64) {
         this.clockDivider = Math.round((value - 64) / 8)
       } else if (value < 63) {
@@ -71,7 +71,7 @@ export default class DelayFX {
         this.clockDivider = 1
       }
     }
-    if (ccnum === 2) { // feedback
+    if (ccnum === 17) { // feedback
       this.returnGain.gain.setTargetAtTime(cubic(midiFloat(value)) * 2, this.audioContext.currentTime, 0.001)
     }
   }
