@@ -56,7 +56,6 @@ export default class MidiRouter {
         })
       }
       if (data[0] === 0xFC) {
-        console.log('stop')
         this.channelHandlers.forEach((handlers) => {
           handlers.forEach((handler) => {
             if (handler && typeof handler.stop === 'function') {
@@ -71,7 +70,6 @@ export default class MidiRouter {
       const command = data[0] & 0xF0
 
       if (command === 144) {
-        console.log('trigger', channel, data[1], data[2])
         // handle noteon
         // Specific Quack Handling
         if (channel === QUACK_CHANNEL && data[1] === QUACK_NOTE) {
@@ -110,9 +108,9 @@ export default class MidiRouter {
       if (command === 224 && this.channelHandlers[channel] != null) {
         // handle PB
         this.channelHandlers[channel].forEach((handler) => {
-          if (handler && (typeof handler.cc === 'function')) {
-            const pbValue = ((data[2] << 7 + data[1]) - 0x2000) / 8192
-            handler.cc(data[1], data[2])
+          if (handler && (typeof handler.pb === 'function')) {
+            const pbValue = (((data[2] << 7) + data[1]) / 8192) - 1
+            handler.pb(pbValue)
           }
         })
       }

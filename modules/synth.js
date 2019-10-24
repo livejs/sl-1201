@@ -146,7 +146,7 @@ export default class Synth {
 
   pb (value) {
     const time = this.context.currentTime
-    this.pitch.offset.setTargetAtTime((value * 2 - 1) * 1200 + 1200, time, PITCH_SMOOTHING)
+    this.pitch.offset.setTargetAtTime((value * 2 - 1) * 1200 , time, PITCH_SMOOTHING)
   }
 
   noteOn (note, velocity) {
@@ -158,7 +158,6 @@ export default class Synth {
   noteOff (note) {
     let last = this.noteStack[this.noteStack.length - 1]
     removeAllFrom(note, this.noteStack)
-    console.log(note, this.noteStack)
     if (this.noteStack.length && last === note) {
       this._triggerAttack()
       this._setNote(this.noteStack[this.noteStack.length - 1])

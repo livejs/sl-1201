@@ -40,7 +40,6 @@ class PolyVoice {
   }
   noteOn(note) {
 
-    console.log("NOn", note, this.on)
     const time = this.context.currentTime
     this.on = true
     this.note = note
@@ -55,7 +54,6 @@ class PolyVoice {
   }
   noteOff() {
     const time = this.context.currentTime
-    console.log("NOff")
     this.on = false
     //this.amp.gain.linearRampToValueAtTime(0, time + this.synth.releaseDuration)
     this.envelope.offset.setTargetAtTime(0.0000001, time, this.synth.releaseDuration / 8)
@@ -126,7 +124,6 @@ export default class PolySynth {
         voc.filterEnvelopeAmount.gain.setTargetAtTime(exp(midiFloat(value) * 2 - 1), time, FILTER_SMOOTHING)
       })
     } else if (control === 73) { // attack
-      console.log("ATT", exp(midiFloat(value)) * 4)
       this.attackDuration = exp(midiFloat(value)) * 4
     } else if (control === 75) { // decay
       this.decayDuration = exp(midiFloat(value)) * 4

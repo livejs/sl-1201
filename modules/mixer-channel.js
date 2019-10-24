@@ -58,8 +58,7 @@ export default class MixerChannel {
         this.lowPass.frequency.setTargetAtTime(20000, time, FILTER_SMOOTHING)
         this.highPass.frequency.setTargetAtTime(cubic(midiFloat(value, 64, 127)) * 20000 + 20, time, FILTER_SMOOTHING)
       } else if (value < 63) {
-        this.lowPass.frequency.setTargetAtTime(cubic(midiFloat(value, 0, 63)) * 20000 + 20, time, FILTER_SMOOTHING)
-        this.highPass.frequency.setTargetAtTime(20, time, 0.1)
+        this.lowPass.frequency.setTargetAtTime(20, time, 0.1)
       } else {
         this.lowPass.frequency.setTargetAtTime(20000, time, 0.1)
         this.highPass.frequency.setTargetAtTime(20, time, 0.1)

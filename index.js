@@ -58,55 +58,71 @@ function init () {
   ]
 
   // MIDI Channels for Inst + Send from 1
-  const drums = new DrumSampler('drums.wav', 36, 51)
+  const drums = new DrumSampler('drums.wav', 36, 63)
 
-  drums.config(36, { volume: 1.2 })
-  drums.config(37, { volume: 0.5 })
-  drums.config(39, { volume: 0.7 }) // clap
-  drums.config(48, { volume: 0.7 }) // clap
+  // Accoustic Kit
+  drums.config(36, { volume: 1.0 }) // Kick 1
+  drums.config(37, { volume: 1.0 }) // Click
+  drums.config(38, { volume: 1.0 }) // Snare 1
+  drums.config(39, { volume: 1.0 }) // clap
+  drums.config(40, { volume: 1.0 }) // Snare 2
+  drums.config(41, { volume: 1.0 }) // Boom Kick
+  drums.config(42, { volume: 0.5, chokeGroup: 'h' }) // HH Cl
+  drums.config(43, { volume: 1.0 }) // Tom Low
+  drums.config(44, { volume: 1.0 }) // Snap
+  drums.config(45, { volume: 1.0 }) // Tom Mid
+  drums.config(46, { volume: 0.5, chokeGroup: 'h' }) // HH Op
+  drums.config(47, { volume: 1.0 }) // Tom Hi
+  drums.config(48, { volume: 1.0 }) // Clapslap ?
+  drums.config(49, { volume: 0.5 }) // Ride 1
+  drums.config(50, { volume: 0.3 }) // Crash
+  drums.config(51, { volume: 0.5 }) // Ride 2
 
-  // drums.config(56, { volume: 0.5 })
+  // 808 Kit
+  drums.config(52, { volume: 1.5 }) // Kick
+  drums.config(53, { volume: 1.0 }) // Snare
+  drums.config(54, { volume: 1.0 }) // Clap
+  drums.config(55, { volume: 0.5, chokeGroup: 'h' }) // HH Cl
+  drums.config(56, { volume: 0.5, chokeGroup: 'h' }) // Maracas
+  drums.config(57, { volume: 0.2 }) // Ride
 
-  // drums.config(57, { volume: 0.7 })
-  // drums.config(58, { volume: 0.7 })
-  // drums.config(59, { volume: 0.7 })
-  // congas
-  drums.config(40, { volume: 0.5 })
-  drums.config(42, { volume: 0.5 })
-  drums.config(44, { volume: 0.5 })
+  // Synth Kit
 
-  drums.config(49, { volume: 0.6 })
-  drums.config(50, { volume: 0.3 })
-  drums.config(51, { volume: 0.6 })
-  // drums.config(53, { volume: 0.6 })
+  drums.config(58, { volume: 1.5 }) // Kick 1
+  drums.config(59, { volume: 1.0 }) // Snare 1
+  drums.config(60, { volume: 1.0 }) // Kick 2
+  drums.config(61, { volume: 0.2 }) // Klang
+  drums.config(62, { volume: 1.5 }) // Snare 2
+  drums.config(63, { volume: 1.0 }) // Tom
 
-  // hats
-  drums.config(42, { chokeGroup: 'h', volume: 0.3 })
-  drums.config(46, { chokeGroup: 'h', volume: 0.3 })
+
   
   const bass = new Synth()
-  const lead = new PolySynth()
+  const lead = new Synth()
+  const poly = new PolySynth()
+  
   const slicer = new Slicer({
     ticks: 42 * BEAT_TICKS * 4,
     sliceCount: 42 * 4,
     startNote: 0
   })
 
-  const oneshots = new DrumSampler('oneshot.wav', 39, 43)
-  oneshots.config(36, { chokeGroup: 'p', volume: 1.5 })
-  oneshots.config(37, { chokeGroup: 'p', volume: 0.5 })
-  oneshots.config(39, { chokeGroup: 'l' })
-  oneshots.config(40, { chokeGroup: 'l' })
-  oneshots.config(41, { chokeGroup: 'l' })
-  oneshots.config(42, { chokeGroup: 'l' })
-  oneshots.config(43, { chokeGroup: 'l' })
-
+  const oneshots = new DrumSampler('oneshot.wav', 36, 44)
+  oneshots.config(36, { volume: 0.1 })
+  oneshots.config(37, { volume: 0.3 })
+  oneshots.config(38, { volume: 0.8, chokeGroup: 'v' })
+  oneshots.config(39, { chokeGroup: 'v' })
+  oneshots.config(40, { chokeGroup: 'v' })
+  oneshots.config(41, { volume: 1.5, chokeGroup: 'v' })
+  oneshots.config(42, { volume: 1.5, chokeGroup: 'v' })
+  oneshots.config(43, { chokeGroup: 'v' })
   const reverbFX = new ReverbFX()
   const delayFX = new DelayFX()
 
   // MIDI Channels for mixer channels from 8
   const drumsChannel = new MixerChannel()
   const bassChannel = new MixerChannel({ duckAmount: 0.9 })
+  const polyChannel = new MixerChannel({ duckAmount: 1 })
   const leadChannel = new MixerChannel({ duckAmount: 1, highPass: 100 })
   const slicerChannel = new MixerChannel({ duckAmount: 0.8 })
   const oneshotsChannel = new MixerChannel({ duckAmount: 0.8 })
@@ -126,6 +142,7 @@ function init () {
 
   drums.output.connect(drumsChannel.input)
   bass.output.connect(bassChannel.input)
+  poly.output.connect(polyChannel.input)
   lead.output.connect(leadChannel.input)
   slicer.output.connect(slicerChannel.input)
   oneshots.output.connect(oneshotsChannel.input)
@@ -135,13 +152,13 @@ function init () {
 
   // connect channel strips to output
   ;[
-    drumsChannel, bassChannel, leadChannel, slicerChannel, oneshotsChannel,
+    drumsChannel, bassChannel, polyChannel, leadChannel, slicerChannel, oneshotsChannel,
     delayChannel, reverbChannel
   ].forEach((ch) => ch.output.connect(masterOutput))
 
   // connect sends
   ;[
-    drumsChannel, bassChannel, leadChannel, slicerChannel, oneshotsChannel
+    drumsChannel, bassChannel, leadChannel, polyChannel, slicerChannel, oneshotsChannel
   ].forEach((ch) => {
     ch.reverbSend.connect(reverbFX.input)
     ch.delaySend.connect(delayFX.input)
@@ -152,10 +169,12 @@ function init () {
   ;[
     [drums, drumsChannel],
     [bass, bassChannel], 
+    [poly, polyChannel], 
     [lead, leadChannel], 
     [slicer, slicerChannel], 
     [oneshots, oneshotsChannel],
-    [reverbFX, reverbChannel], [delayFX, delayChannel],
+    [reverbFX, reverbChannel], 
+     [delayFX, delayChannel],
     [ui] // to display clock info
   ].forEach((obj, i) => {
     midiInputs.forEach(router => {
@@ -166,13 +185,11 @@ function init () {
   // Sample loader config
   const loader = new SampleLoader()
 
-  loader.register('breaks.wav')
   loader.register(drums.sampleNames)
   loader.register(oneshots.sampleNames)
 
   // assign samples after all been loaded and decoded
   loader.load().then(() => {
-    slicer.buffer = loader.getBuffer('breaks.wav')
     loader.getBuffers(drums.sampleNames).forEach((buffer, index) => {
       drums.setBuffer(index, buffer)
     })

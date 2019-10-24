@@ -39,7 +39,6 @@ export default class DrumSampler {
   }
 
   noteOn (note, velocity) {
-    console.log('SNote', note, this.samples[note])
     if (this.samples[note] == null) { return }
     if (this.samples[note].buffer == null) { return }
 
@@ -60,7 +59,6 @@ export default class DrumSampler {
     src.buffer = buffer
     src.connect(gain)
     if (this.samples[note].chokeGroup) {
-      console.log('CHOKE', this.chokeGroups[this.samples[note].chokeGroup])
       const toChoke = this.chokeGroups[this.samples[note].chokeGroup]
       if (toChoke != null) {
         toChoke.gain.linearRampToValueAtTime(0, now + 0.02)
